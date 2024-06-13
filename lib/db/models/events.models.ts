@@ -28,8 +28,8 @@ const EventSchema: Schema<IEvent> = new Schema({
   capacity: { type: String },
   isFree: { type: Boolean, default: false },
   url: { type: String },
-  category: { type: Schema.Types.ObjectId, ref: 'Category', required: true },
-  organizer: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true },
+  organizer: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
 });
 
 const Event: Model<IEvent> = mongoose.models.Event || mongoose.model<IEvent>('Event', EventSchema);
