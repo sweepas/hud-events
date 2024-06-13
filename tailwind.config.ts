@@ -12,7 +12,7 @@ const config: Config = {
     extend: {
       colors: {
         primary: {
-          50: '#F0F5FF', // Example color value, adjust as needed
+          50: '#F0F5FF', 
           DEFAULT: 'hsl(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))',
         },

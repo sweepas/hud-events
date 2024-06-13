@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm, FormProvider, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -38,6 +38,10 @@ export default function LoginForm() {
   });
   const [apiError, setApiError] = useState<string | null>(null);
   const router = useRouter();
+
+  useEffect(() => {
+    Cookies.remove('token');
+  }, []);
 
   const onSubmit = async (data: FormData) => {
     setApiError(null);

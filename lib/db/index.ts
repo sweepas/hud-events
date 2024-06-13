@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 
-// Load environment variables from .env file
+
 dotenv.config();
 console.log('MONGODB_URI:bgfdgbg', process.env.MONGODB_URI);
 
@@ -9,11 +9,10 @@ const connection: { isConnected?: number } = {};
 
 async function connectToDatabase() {
     if (connection.isConnected) {
-        console.log("Using existing connection");
         return;
     }
 
-    // Set a default value for MONGODB_URI if it's not defined
+
     const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/yourLocalDatabaseName';
 
     try {
