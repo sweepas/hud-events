@@ -11,9 +11,15 @@ const EventPage = ({ event }: { event: IEvent | null }) => {
   return (
     <div className="container mx-auto px-4 py-8">
       <Card>
+        <img
+          src={event.imageUrl}
+          alt={event.title}
+          className="w-full h-auto rounded-lg shadow-md mb-4"
+        />
         <CardHeader>
           <CardTitle>{event.title}</CardTitle>
         </CardHeader>
+
         <CardContent>
           <p>{event.description}</p>
           <p>

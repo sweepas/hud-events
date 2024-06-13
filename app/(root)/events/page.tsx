@@ -1,11 +1,11 @@
-"use client";
+
 
 import AllEvents from "@/components/shared/AllEvents";
+import { fetchAllEvents } from "../../../lib/actions/events.actions";
+import Event from "../../../lib/db/models/events.models";
 
-export default function CreateUserPage() {
-  return (
-    <div>
-      <AllEvents />
-    </div>
-  );
-}
+export default async function EventsPage() {
+    const events = await fetchAllEvents();
+    return <AllEvents events={events} />;
+  }
+  
