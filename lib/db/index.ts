@@ -1,5 +1,8 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import './models/category.models';
+import '../db/models/events.models';
+import '../db/models/users.model'
 
 
 dotenv.config();

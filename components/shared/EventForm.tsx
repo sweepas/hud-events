@@ -15,9 +15,11 @@ import {
   FormMessage,
 } from "../ui/form";
 import CardWrapper from "./CardWrapper";
-import { Select } from "../ui/select";
 import { Checkbox } from "../ui/checkbox";
 import Dropdown from "./Dropdown";
+import { useRouter } from "next/navigation";
+import { IEvent } from "../../lib/db/models/events.models";
+import { fetchEvent } from "../../lib/actions/events.actions";
 
 const schema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
@@ -34,59 +36,102 @@ const schema = z.object({
 });
 
 type FormData = z.infer<typeof schema>;
-
-export default function EventForm() {
+type EventFormProps = {
+  userId: string;
+  type: "Create" | "Update";
+  event?: IEvent;
+  eventId?: string;
+};
+const EventForm: React.FC<EventFormProps> = ({
+  userId,
+  type,
+  event,
+  eventId,
+}) => {
+  const defaultValues = event
+    ? {
+        title: event.title,
+        description: event.description,
+        location: event.location,
+        imageUrl: event.imageUrl,
+        startDateTime: new Date(event.startDateTime),
+        endDateTime: new Date(event.endDateTime),
+        price: event.price,
+        capacity: event.capacity,
+        isFree: event.isFree,
+        url: event.url,
+        category: event.category.name,
+      }
+    : {
+        title: "",
+        description: "",
+        location: "",
+        imageUrl: "",
+        startDateTime: new Date(),
+        endDateTime: new Date(),
+        price: "",
+        capacity: "",
+        isFree: false,
+        url: "",
+        category: "",
+      };
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
-    defaultValues: {
-      title: "",
-      description: "",
-      location: "",
-      imageUrl: "",
-      startDateTime: new Date(),
-      endDateTime: new Date(),
-      price: "",
-      capacity: "",
-      isFree: false,
-      url: "",
-      category: "",
-    },
+    defaultValues: defaultValues,
   });
   const [apiError, setApiError] = useState<string | null>(null);
   const [categories, setCategories] = useState<{ _id: string; name: string }[]>(
     []
   );
+  const [fetchedEvent, setFetchedEvent] = useState<IEvent | null>(null);
 
   useEffect(() => {
-    fetch("/api/categories")
-      .then((response) => response.json())
-      .then((data) => setCategories(data))
-      .catch((error) => console.error("Error fetching categories:", error));
-  }, []);
+    const fetchEventIfNeeded = async () => {
+      if (type === "Update" && eventId) {
+        const fetchedEvent = await fetchEvent(eventId);
+        setFetchedEvent(fetchedEvent);
+      }
+    };
+
+    fetchEventIfNeeded();
+  }, [type, eventId]);
+  const router = useRouter();
+
+  // useEffect(() => {
+  //   fetch("/api/categories")
+  //     .then((response) => response.json())
+  //     .then((data) => setCategories(data))
+  //     .catch((error) => console.error("Error fetching categories:", error));
+  // }, []);
 
   const onSubmit = async (data: FormData) => {
     setApiError(null);
     try {
-      const response = await fetch("/api/add-event", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      let response;
+      if (type === "Create") {
+        response = await fetch("/api/add-event", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
 
-      if (response.ok) {
-        console.log("Event created successfully!");
-        form.reset();
+        if (response && response.ok) {
+          console.log("Event created successfully!");
+          form.reset();
+          router.push(`/events/`);
+        } else if (response) {
+          const errorData = await response.json();
+          setApiError(errorData.error || "An error occurred");
+        }
       } else {
-        const errorData = await response.json();
-        setApiError(errorData.error || "An error occurred");
+        setApiError("An error occurred");
       }
     } catch (error) {
       setApiError("An error occurred");
     }
   };
-
   return (
     <CardWrapper
       title="Add Event"
@@ -249,6 +294,7 @@ export default function EventForm() {
             name="category"
             render={({ field }) => (
               <FormItem className="w-full">
+                <FormLabel>Category</FormLabel>
                 <FormControl>
                   <Dropdown
                     onChangeHandler={field.onChange}
@@ -264,4 +310,5 @@ export default function EventForm() {
       </FormProvider>
     </CardWrapper>
   );
-}
+};
+export default EventForm;

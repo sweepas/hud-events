@@ -1,7 +1,7 @@
 
 
 import { NextRequest, NextResponse } from 'next/server';
-import Category from '../../../lib/db/models/category.events';
+import Category from '../../../lib/db/models/category.models';
 import connectToDatabase from '../../../lib/db';
 
 export async function GET(req: NextRequest) {

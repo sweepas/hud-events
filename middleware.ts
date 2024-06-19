@@ -1,7 +1,10 @@
-
-
 import { NextRequest, NextResponse } from 'next/server';
-import { jwtVerify } from 'jose'; 
+import { jwtVerify, JWTPayload } from 'jose';
+
+interface CustomJWTPayload extends JWTPayload {
+  userId: string;
+  isStaff: boolean;
+}
 
 export async function middleware(req: NextRequest) {
   const token = req.cookies.get('token')?.value;
@@ -14,17 +17,17 @@ export async function middleware(req: NextRequest) {
 
   try {
     const secret = new TextEncoder().encode(process.env.JWT_SECRET);
-    const { payload } = await jwtVerify(token, secret);
+    const { payload } = await jwtVerify(token, secret) as { payload: CustomJWTPayload };
 
-    const isStaff = payload.isStaff;
-    if (!isStaff && req.nextUrl.pathname === '/add-event') {
-      return NextResponse.redirect(new URL('/unauthorized', req.url));
-    }
-    
+    req.nextUrl.searchParams.set('isStaff', payload.isStaff.toString());
+    req.nextUrl.searchParams.set('userId', payload.userId);
+
     return NextResponse.next();
   } catch (error) {
     console.error('Token verification failed, redirecting to login:', error);
-    return NextResponse.redirect(new URL('/login', req.url));
+    const response = NextResponse.redirect(new URL('/login', req.url));
+    response.cookies.set('token', '', { maxAge: -1 });
+    return response;
   }
 }
 

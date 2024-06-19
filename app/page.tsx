@@ -1,10 +1,43 @@
-import { Button } from "@/components/ui/button";
+"use client";
 
+import { useEffect, useState } from "react";
+import AllEvents from "@/components/shared/AllEvents";
+import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
-import RootLayout from "./layout";
+import { fetchAllEvents } from "../lib/actions/events.actions";
+import CategoryFilter from "@/components/shared/CategoryFilter";
+import { SearchParamProps } from "../types/types";
 
-export default function HomePage() {
+const HomePage = ({ searchParams }: SearchParamProps) => {
+  const [events, setEvents] = useState([]);
+  const [totalPages, setTotalPages] = useState(0);
+  const page = Number(searchParams?.page) || 1;
+  const searchText = (searchParams?.query as string) || "";
+  const category = (searchParams?.category as string) || "";
+
+  useEffect(() => {
+    const fetchEventsData = async () => {
+      const response = await fetchAllEvents({
+        query: searchText,
+        category,
+        page,
+        limit: 6,
+      });
+
+      if (response) {
+        setEvents(response.data || []);
+        setTotalPages(response.totalPages);
+      } else {
+        console.error("Failed to fetch events");
+      }
+    };
+
+    fetchEventsData();
+  }, [searchText, category, page]);
+
+
+
   return (
     <>
       <section className="bg-primary-50 bg-dotted-pattern bg-contain py-5 md:py-10">
@@ -16,7 +49,7 @@ export default function HomePage() {
               activities happening in your neighborhood.
             </p>
             <Button size="lg" asChild className="button w-full sm:w-fit">
-              <Link href="/add-event">Explore Now</Link>
+              <Link href="#events">Explore Now</Link>
             </Button>
           </div>
           <Image
@@ -25,6 +58,7 @@ export default function HomePage() {
             width={1000}
             height={1000}
             className="max-h-[70vh] object-contain object-center 2xl:max-h-[50vh]"
+            priority
           />
         </div>
       </section>
@@ -32,10 +66,26 @@ export default function HomePage() {
         id="events"
         className="wrapper my-8 flex flex-col gap-8 md:gap-12"
       >
+        <div className="flex w-full flex-col gap-5 md:flex-row">
+          <CategoryFilter />
+        </div>
         <h2 className="h2-bold">
-          Trusted by <br /> Thousands of Events
+          Trust by <br /> Thousands of Users in your Hood
         </h2>
+
+        <div className="flex w-full flex-col gap-5 md:flex-row"></div>
+
+        <AllEvents
+          events={events}
+          emptyTitle="No Events Found"
+          emptyStateSubtext="Come back later"
+          collectionType="All_Events"
+          limit={6}
+          page={page}
+          totalPages={totalPages}
+        />
       </section>
     </>
   );
-}
+};
+export default HomePage;

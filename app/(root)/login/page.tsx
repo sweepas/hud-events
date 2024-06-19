@@ -1,4 +1,4 @@
-"use client"; // This ensures the page is treated as a client-side component
+"use client";
 
 import React from "react";
 import LoginForm from "@/components/shared/LoginForm";
