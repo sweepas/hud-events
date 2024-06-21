@@ -7,6 +7,8 @@ Features
 Staff can create and manage events
 Users can browse and attend events
 Users can add events to their Google Calendar
+Users can sort events by category
+Users can check their profile with upcoming events and past events
 
 
 Installation
@@ -41,6 +43,11 @@ JWT_SECRET=<Your JWT Secret>
 Follow the link to MongoDB documentation
 
 https://www.mongodb.com/docs/
+
+user to browse:
+
+staff: tom@email.com pass: 11111111
+user: john@email.com pass: 11111111
 
 
 
