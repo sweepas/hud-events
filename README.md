@@ -1,7 +1,7 @@
-The Hood Events
+The Hood Hub
 
 
-The Hood Eventsis a community events application where staff members can post events and users can create an account to attend events. Users can also add events to their Google Calendar if they wish.
+The Hood Hub is a community events application where staff members can post events and users can create an account to attend events. Users can also add events to their Google Calendar if they wish.
 
 Features
 Staff can create and manage events
@@ -46,4 +46,4 @@ https://www.mongodb.com/docs/
 
 link to the hosted version
 
-
+https://hud-events.vercel.app/
