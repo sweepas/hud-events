@@ -6,7 +6,6 @@ import '../db/models/users.model'
 
 
 dotenv.config();
-console.log('MONGODB_URI:bgfdgbg', process.env.MONGODB_URI);
 
 const connection: { isConnected?: number } = {};
 

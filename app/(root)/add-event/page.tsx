@@ -3,17 +3,16 @@
 import EventForm from "@/components/shared/EventForm";
 import { useEffect, useState } from "react";
 import getUserInfoFromToken from "../../../lib/utils";
-import Router, { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
+
 type CreateEventProps = {
   token: string;
-  params: {
-    id: string;
-  };
 };
 
-const CreateEvent: React.FC<CreateEventProps> = ({ token, params: { id } }) => {
+const CreateEvent: React.FC<CreateEventProps> = ({ token }) => {
   const [userId, setUserId] = useState<string | null>(null);
   const router = useRouter();
+
   useEffect(() => {
     const fetchAndUpdate = async () => {
       const otherToken = fetchTokenFromLocalStorage();
@@ -31,7 +30,7 @@ const CreateEvent: React.FC<CreateEventProps> = ({ token, params: { id } }) => {
     };
 
     fetchAndUpdate();
-  }, [id, token]);
+  }, [token]);
 
   return (
     <div>
@@ -40,6 +39,7 @@ const CreateEvent: React.FC<CreateEventProps> = ({ token, params: { id } }) => {
   );
 };
 
+export default CreateEvent;
 
 const fetchTokenFromLocalStorage = () => {
   if (typeof window !== "undefined") {
