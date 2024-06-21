@@ -40,7 +40,7 @@ const CreateEvent: React.FC<CreateEventProps> = ({ token, params: { id } }) => {
   );
 };
 
-export default CreateEvent;
+
 const fetchTokenFromLocalStorage = () => {
   if (typeof window !== "undefined") {
     return localStorage.getItem("token");

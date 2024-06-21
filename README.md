@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+The Hood Events
 
-## Getting Started
 
-First, run the development server:
+The Hood Eventsis a community events application where staff members can post events and users can create an account to attend events. Users can also add events to their Google Calendar if they wish.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Features
+Staff can create and manage events
+Users can browse and attend events
+Users can add events to their Google Calendar
+
+
+Installation
+
+Follow these steps to clone and set up the project locally.
+
+
+Prerequisites
+Make sure you have the following installed on your machine:
+
+Node.js (version 14 or higher)
+npm (version 6 or higher)
+MongoDB
+Clone the Repository
+
+
+git clone https://github.com/your-username/hud-events.git
+cd hud-events
+
+Install Dependencies
+
+npm install
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Environment Variables
+Create a .env file in the root of the project and add the following environment variables:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+MONGODB_URI=<Your MongoDB URI>
+JWT_SECRET=<Your JWT Secret>
 
-## Learn More
+Follow the link to MongoDB documentation
 
-To learn more about Next.js, take a look at the following resources:
+https://www.mongodb.com/docs/
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+link to the hosted version
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
