@@ -1,10 +1,6 @@
-'use client';
+"use client";
 
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import Image from "next/image";
 import { Separator } from "../ui/separator";
 import NavItems from "./NavItems";
@@ -18,7 +14,7 @@ const MobileNav: React.FC<MobileNavProps> = ({ token }) => {
     <nav className="md:hidden">
       <Sheet>
         <SheetTrigger className="align-middle">
-          <Image 
+          <Image
             src="/assets/images/menu.svg"
             alt="menu"
             width={24}
@@ -29,11 +25,11 @@ const MobileNav: React.FC<MobileNavProps> = ({ token }) => {
         <SheetContent className="flex flex-col gap-6 bg-white md:hidden">
           <h1 className="font-black">TheHoodHub</h1>
           <Separator className="border border-gray-50" />
-          <NavItems token={token} />
+          <NavItems />
         </SheetContent>
       </Sheet>
     </nav>
-  )
-}
+  );
+};
 
 export default MobileNav;

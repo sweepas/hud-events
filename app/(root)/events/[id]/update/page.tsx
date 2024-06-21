@@ -1,35 +1,35 @@
-'use client'
+"use client";
 
 import React, { useEffect, useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
 import { fetchEvent } from "../../../../../lib/actions/events.actions";
 import getUserInfoFromToken from "../../../../../lib/utils";
 import EventForm from '../../../../../components/shared/EventForm';
 
-type UpdateEventProps = {
-  token: string ;
-  params: {
-    id: string;
-};
-}
-const UpdateEvent: React.FC<UpdateEventProps> = ({ token, params: { id } }) => {
+const UpdateEvent: React.FC = () => {
+  const { id } = useParams();
   const [event, setEvent] = useState(null); 
   const [userId, setUserId] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchAndUpdate = async () => {
-      const fetchedEvent = await fetchEvent(id);
-      setEvent(fetchedEvent);
+      if (id) {
+        const fetchedEvent = await fetchEvent(id as string);
+        setEvent(fetchedEvent);
 
-      const userInfo = getUserInfoFromToken(token);
-      if (userInfo) {
-        setUserId(userInfo.userId);
-      } else {
-        console.log("Failed to decode token or token is null");
+        const token = fetchTokenFromLocalStorage();
+        const userInfo = getUserInfoFromToken(token as string);
+        if (userInfo) {
+          setUserId(userInfo.userId);
+        } else {
+          console.log("Failed to decode token or token is null");
+        }
       }
     };
 
     fetchAndUpdate();
-  }, [id, token]);
+  }, [id]);
 
   if (!event) {
     return <div>Loading...</div>; 
@@ -42,10 +42,17 @@ const UpdateEvent: React.FC<UpdateEventProps> = ({ token, params: { id } }) => {
       </section>
 
       <div className="wrapper my-8">
-        <EventForm event={event} type="Update" userId={userId?? "defaultUserId"}/>
+        <EventForm event={event} type="Update" userId={userId ?? "defaultUserId"} />
       </div>
     </>
   );
 };
 
 export default UpdateEvent;
+
+const fetchTokenFromLocalStorage = () => {
+  if (typeof window !== "undefined") {
+    return localStorage.getItem("token");
+  }
+  return null;
+};
