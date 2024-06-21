@@ -10,7 +10,7 @@ export const headerLinks = [
   },
   {
     label: "Create Event",
-    route: "/events/add-event",
+    route: "/add-event",
   },
   {
     label: "My Profile",
@@ -18,25 +18,32 @@ export const headerLinks = [
   },
 ];
 
-const NavItems = () => {
+const NavItems: React.FC = () => {
   const pathname = usePathname();
   const [isMounted, setIsMounted] = useState(false);
   const [isStaff, setIsStaff] = useState(false);
+  const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {
-    const token = fetchTokenFromLocalStorage();
-    if (token) {
-      const userInfo = getUserInfoFromToken(token);
+    const storedToken = fetchTokenFromLocalStorage();
+    if (storedToken) {
+      setToken(storedToken);
+      const userInfo = getUserInfoFromToken(storedToken);
       if (userInfo?.isStaff) {
         setIsStaff(true);
       }
     }
+    setIsMounted(true);
   }, []);
+
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <ul className="md:flex-between flex w-full flex-col items-start gap-5 md:flex-row">
       {headerLinks.map((link) => {
-        if (link.route === "/events/create" && !isStaff) {
+        if (link.route === "/add-event" && !isStaff) {
           return null;
         }
         const isActive = pathname === link.route;
@@ -45,7 +52,7 @@ const NavItems = () => {
           <li
             key={link.route}
             className={`${
-              isActive && "text-primary-500"
+              isActive ? "text-primary-500" : ""
             } flex-center p-medium-16 whitespace-nowrap`}
           >
             <Link href={link.route}>{link.label}</Link>

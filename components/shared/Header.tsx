@@ -6,18 +6,31 @@ import { Button } from "../ui/button";
 import NavItems from "./NavItems";
 import MobileNav from "./MobileNav";
 import React, { useEffect, useState } from "react";
-
-import { getCookie } from "cookies-next";
+import getUserInfoFromToken from "../../lib/utils";
+import { useRouter } from "next/navigation";
 
 const Header = () => {
   const [token, setToken] = useState<string | null>(null);
+  const [isStaff, setIsStaff] = useState<boolean | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
-    const storedToken = getCookie("token");
-    if (typeof storedToken === "string") {
+    const storedToken = fetchTokenFromLocalStorage();
+    const userInfo = getUserInfoFromToken(storedToken as string);
+    if (storedToken) {
       setToken(storedToken);
     }
+
+    if (userInfo?.isStaff) {
+      setIsStaff(true);
+    }
   }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setToken(null);
+    router.push("/");
+  };
 
   return (
     <header className="w-full border-b">
@@ -27,13 +40,13 @@ const Header = () => {
         </Link>
 
         <nav className="md:flex-between hidden w-full max-w-xs">
-          <NavItems token={token} />
+          <NavItems />
         </nav>
 
         <div className="flex w-32 justify-end gap-3">
           {token ? (
             <>
-              <Button onClick={() => setToken(null)}>Logout</Button>
+              <Button onClick={handleLogout}>Logout</Button>
               <MobileNav token={token} />
             </>
           ) : (
@@ -48,3 +61,10 @@ const Header = () => {
 };
 
 export default Header;
+
+const fetchTokenFromLocalStorage = () => {
+  if (typeof window !== "undefined") {
+    return localStorage.getItem("token");
+  }
+  return null;
+};

@@ -8,7 +8,6 @@ interface CustomJWTPayload extends JWTPayload {
 
 export async function middleware(req: NextRequest) {
   const token = req.cookies.get('token')?.value;
-console.log(token);
 
   if (!token) {
     const response = NextResponse.redirect(new URL('/unauthorized', req.url));
@@ -20,8 +19,15 @@ console.log(token);
     const secret = new TextEncoder().encode(process.env.JWT_SECRET);
     const { payload } = await jwtVerify(token, secret) as { payload: CustomJWTPayload };
 
+    
     req.nextUrl.searchParams.set('isStaff', payload.isStaff.toString());
     req.nextUrl.searchParams.set('userId', payload.userId);
+
+
+    const staffOnlyRoutes = ['/add-event'];
+    if (staffOnlyRoutes.includes(req.nextUrl.pathname) && !payload.isStaff) {
+      return NextResponse.redirect(new URL('/unauthorized', req.url));
+    }
 
     return NextResponse.next();
   } catch (error) {

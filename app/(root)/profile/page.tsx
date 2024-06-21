@@ -43,9 +43,7 @@ const ProfilePage: React.FC = () => {
         }
 
         const data = await response.json();
-        console.log("Response Data: ", data);
-        console.log("Upcoming Events: ", data.upcomingEvents);
-        console.log("Past Events: ", data.pastEvents);
+       
 
         setUpcomingEvents(data.upcomingEvents);
         setPastEvents(data.pastEvents);
@@ -77,7 +75,6 @@ const ProfilePage: React.FC = () => {
           <ul>
             {upcomingEvents.map((event) => {
               const formatted = formatDateTime(event.startDateTime.toString());
-              console.log(event._id);
 
               return (
                 <li key={event.id} className="mb-4">

@@ -61,7 +61,7 @@ const CheckoutButton: React.FC<CheckoutButtonProps> = ({
           loading ? "opacity-50 cursor-not-allowed" : ""
         }`}
       >
-        {loading ? "Processing..." : "Buy"}
+        {loading ? "Processing..." : "Attend"}
       </Button>
       {error && <p className="text-red-500 mt-2">{error}</p>}
     </div>
