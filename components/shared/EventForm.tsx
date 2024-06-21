@@ -21,6 +21,7 @@ import { useRouter } from "next/navigation";
 import { IEvent } from "../../lib/db/models/events.models";
 import { fetchEvent } from "../../lib/actions/events.actions";
 
+
 const schema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
   description: z.string().optional(),
@@ -85,6 +86,7 @@ const EventForm: React.FC<EventFormProps> = ({
   );
   const [fetchedEvent, setFetchedEvent] = useState<IEvent | null>(null);
 
+  
   useEffect(() => {
     const fetchEventIfNeeded = async () => {
       if (type === "Update" && eventId) {

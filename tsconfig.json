@@ -18,7 +18,7 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"],  // If your components are in the 'src' folder
+      "@/*": ["./src/*"], 
       "@/components/*": ["./components/*"]
     }
   },

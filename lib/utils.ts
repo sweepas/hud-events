@@ -71,7 +71,7 @@ export function removeKeysFromQuery({ params, keysToRemove }: RemoveUrlQueryPara
   )
 }
 
-export const formatDateTime = (dateString: Date) => {
+export const formatDateTime = (dateString: string) => {
   const dateTimeOptions: Intl.DateTimeFormatOptions = {
     weekday: 'short', 
     month: 'short', 
@@ -79,33 +79,41 @@ export const formatDateTime = (dateString: Date) => {
     hour: 'numeric', 
     minute: 'numeric',
     hour12: true, 
-  }
+  };
 
   const dateOptions: Intl.DateTimeFormatOptions = {
     weekday: 'short', 
     month: 'short',
     year: 'numeric', 
     day: 'numeric', 
-  }
+  };
 
   const timeOptions: Intl.DateTimeFormatOptions = {
     hour: 'numeric', 
     minute: 'numeric', 
     hour12: true, 
+  };
+
+  const date = new Date(dateString);
+
+  if (isNaN(date.getTime())) {
+    return {
+      dateTime: 'Invalid Date',
+      dateOnly: 'Invalid Date',
+      timeOnly: 'Invalid Time',
+    };
   }
 
-  const formattedDateTime: string = new Date(dateString).toLocaleString('en-US', dateTimeOptions)
-
-  const formattedDate: string = new Date(dateString).toLocaleString('en-US', dateOptions)
-
-  const formattedTime: string = new Date(dateString).toLocaleString('en-US', timeOptions)
+  const formattedDateTime: string = date.toLocaleString('en-US', dateTimeOptions);
+  const formattedDate: string = date.toLocaleString('en-US', dateOptions);
+  const formattedTime: string = date.toLocaleString('en-US', timeOptions);
 
   return {
     dateTime: formattedDateTime,
     dateOnly: formattedDate,
     timeOnly: formattedTime,
-  }
-}
+  };
+};
 
 export const convertFileToUrl = (file: File) => URL.createObjectURL(file)
 
@@ -118,8 +126,6 @@ export const formatPrice = (price: string) => {
 
   return formattedPrice
 }
-
-
 
 
 

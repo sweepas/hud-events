@@ -39,9 +39,7 @@ export default function LoginForm() {
   const [apiError, setApiError] = useState<string | null>(null);
   const router = useRouter();
 
-  useEffect(() => {
-    Cookies.remove('token');
-  }, []);
+
 
   const onSubmit = async (data: FormData) => {
     setApiError(null);
@@ -57,6 +55,7 @@ export default function LoginForm() {
       if (response.ok) {
         const { token } = await response.json();
         Cookies.set('token', token);
+        localStorage.setItem('token', token); 
         console.log('User logged in successfully!');
         form.reset();
         router.push('/');

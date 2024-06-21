@@ -1,28 +1,63 @@
-import EventPage from "@/components/shared/EventPage";
+"use client";
+import React, { useEffect, useState } from "react";
 import {
   fetchEvent,
   getRelatedEventsByCategory,
 } from "../../../../lib/actions/events.actions";
-import { SearchParamProps } from "../../../../types/types";
 import Image from "next/image";
-import { formatDateTime } from "../../../../lib/utils";
+import getUserInfoFromToken, { formatDateTime } from "../../../../lib/utils";
 import { Button } from "@/components/ui/button";
+import AllEvents from "@/components/shared/AllEvents";
+import CheckoutButton from "@/components/shared/CkeckoutButton";
+import AddToCalendarButton from "@/components/shared/AddToCalendarButton";
 
-const EventHero = async ({
+interface EventHeroProps {
+  params: {
+    id: string;
+  };
+  searchParams: {
+    page: string;
+  };
+}
+
+const EventHero: React.FC<EventHeroProps> = ({
   params: { id },
   searchParams,
-}: SearchParamProps) => {
-  const event = await fetchEvent(id);
+}) => {
+  const [event, setEvent] = useState<any>(null);
+  const [relatedEvents, setRelatedEvents] = useState<any>(null);
+  const [token, setToken] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
 
-  const relatedEvents = await getRelatedEventsByCategory({
-    categoryId: event.category._id,
-    eventId: event._id,
-    page: searchParams.page as string,
-  });
+  useEffect(() => {
+    const fetchEventDetails = async () => {
+      const eventDetails = await fetchEvent(id);
+      setEvent(eventDetails);
+
+      const token = fetchTokenFromLocalStorage();
+      setToken(token);
+      const userInfo = token ? getUserInfoFromToken(token) : null;
+      const result = userInfo?.userId;
+
+      setUserId(userInfo?.userId as string);
+
+      const relatedEventsData = await getRelatedEventsByCategory({
+        categoryId: eventDetails.category._id,
+        eventId: eventDetails._id,
+        page: searchParams.page,
+      });
+      setRelatedEvents(relatedEventsData);
+    };
+
+    fetchEventDetails();
+  }, [id, searchParams.page]);
+
+  if (!event) return <div>Loading...</div>;
 
   return (
     <>
       <section className="flex justify-center bg-primary-50 bg-dotted-pattern bg-contain">
+        {" "}
         <div className="grid grid-cols-1 md:grid-cols-2 2xl:max-w-7xl">
           <img
             src={event.imageUrl}
@@ -54,9 +89,17 @@ const EventHero = async ({
                 </p>
               </div>
             </div>
-            <Button>Buy</Button>
-            {/* <CheckoutButton event={event} /> */}
-
+            <CheckoutButton
+              eventId={event._id}
+              eventInfo={{
+                title: event.title,
+                price: event.price,
+                isFree: event.isFree,
+                date: new Date(event.startDateTime).toISOString(),
+              }}
+              userId={userId}
+            />
+            <AddToCalendarButton event={event}/>
             <div className="flex flex-col gap-5">
               <div className="flex gap-2 md:gap-3">
                 <Image
@@ -69,7 +112,8 @@ const EventHero = async ({
                   <p>
                     {formatDateTime(event.startDateTime).dateOnly} -{" "}
                     {formatDateTime(event.startDateTime).timeOnly}
-                  </p>{"\xa0-\xa0"}
+                  </p>
+                  {"\xa0-\xa0"}
                   <p>
                     {" "}
                     {formatDateTime(event.endDateTime).dateOnly} -{" "}
@@ -99,7 +143,27 @@ const EventHero = async ({
           </div>
         </div>
       </section>
+      <section className="wrapper my-8 flex flex-col gap-8 md:gap-12">
+        <h2 className="h2-bold">Related Events</h2>
+        <AllEvents
+          events={relatedEvents?.data}
+          emptyTitle="No Events Found"
+          emptyStateSubtext="Come back later"
+          collectionType="All_Events"
+          limit={3}
+          page={searchParams.page}
+          totalPages={relatedEvents?.totalPages}
+        />
+      </section>
     </>
   );
 };
+
 export default EventHero;
+
+const fetchTokenFromLocalStorage = () => {
+  if (typeof window !== "undefined") {
+    return localStorage.getItem("token");
+  }
+  return null;
+};

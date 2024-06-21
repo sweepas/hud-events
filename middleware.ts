@@ -8,9 +8,10 @@ interface CustomJWTPayload extends JWTPayload {
 
 export async function middleware(req: NextRequest) {
   const token = req.cookies.get('token')?.value;
+console.log(token);
 
   if (!token) {
-    const response = NextResponse.redirect(new URL('/login', req.url));
+    const response = NextResponse.redirect(new URL('/unauthorized', req.url));
     response.cookies.set('token', '', { maxAge: -1 });
     return response;
   }

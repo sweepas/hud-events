@@ -15,6 +15,8 @@ const HomePage = ({ searchParams }: SearchParamProps) => {
   const page = Number(searchParams?.page) || 1;
   const searchText = (searchParams?.query as string) || "";
   const category = (searchParams?.category as string) || "";
+  
+  
 
   useEffect(() => {
     const fetchEventsData = async () => {

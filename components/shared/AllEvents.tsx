@@ -29,7 +29,6 @@ const AllEvents = ({
     return <p>No events found</p>;
   }
 
-  
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold mb-4">Events</h1>
@@ -37,7 +36,7 @@ const AllEvents = ({
         {events.map((event) => (
           <li key={event._id as string}>
             <Link href={`/events/${event._id}`}>
-              <Card>
+              <Card className="h-full block hover:shadow-lg hover:shadow-sky-700 transition-shadow duration-300">
                 <img
                   src={event.imageUrl}
                   alt={event.title}
@@ -71,7 +70,7 @@ const AllEvents = ({
           </li>
         ))}
       </ul>
-      <div className="flex justify-center items-center">
+      <div className="flex justify-center items-center py-10">
         {" "}
         {totalPages && totalPages > 1 && (
           <Pagination
