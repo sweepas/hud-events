@@ -49,10 +49,14 @@ Start the development server:
 npm run dev
 Open http://localhost:3000 with your browser to see the result.
 Usage
+
 Staff Actions
+
 Create Event: Staff can create new events by providing details like title, description, date, time, and category.
 Manage Events: Staff can update or delete existing events.
+
 User Actions
+
 Browse Events: Users can view all available events.
 Attend Events: Users can mark events as attended.
 Add to Google Calendar: Users can add events to their Google Calendar.
@@ -63,16 +67,12 @@ Use the following credentials to browse the application:
 Staff:
 Email: tom@email.com
 Password: 11111111
+
 User:
 Email: john@email.com
 Password: 11111111
-Contributing
-We welcome contributions! Please follow these steps to contribute:
 
-Fork the repository.
-Create a new branch (git checkout -b feature-branch).
-Make your changes and commit them (git commit -m 'Add some feature').
-Push to the branch (git push origin feature-branch).
-Create a new Pull Request.
+
+
 License
 This project is licensed under the MIT License. See the LICENSE file for more details.
