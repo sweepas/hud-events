@@ -23,30 +23,29 @@ Open your terminal.
 
 Clone the repository using the following command:
 
-Copy code
+ 
 git clone https://github.com/your-username/hud-events.git
 Navigate to the project directory:
 
-Copy code
+
 cd hud-events
 Install Dependencies
 Install the required dependencies using npm:
 
-Copy code
 npm install
 
 Set Up the Environment Variables
 Create a .env file in the root of the project.
 Add the following environment variables:
 plaintext
-Copy code
+
 MONGODB_URI=<Your MongoDB URI>
 JWT_SECRET=<Your JWT Secret>
 Replace <Your MongoDB URI> with your actual MongoDB URI and <Your JWT Secret> with a secret key for JWT.
 Running the Application
 Start the development server:
 
-Copy code
+
 npm run dev
 Open http://localhost:3000 with your browser to see the result.
 Usage
