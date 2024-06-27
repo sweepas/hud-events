@@ -20,12 +20,13 @@ npm (version 6 or higher)
 MongoDB
 Clone the Repository
 Open your terminal.
+
 Clone the repository using the following command:
-bash
+
 Copy code
 git clone https://github.com/your-username/hud-events.git
 Navigate to the project directory:
-bash
+
 Copy code
 cd hud-events
 Install Dependencies
